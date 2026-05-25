@@ -51,7 +51,7 @@ export default function LoginPage() {
         {/* App Logo */}
         <div className="inline-flex items-center justify-center p-3 bg-indigo-500/15 border border-indigo-500/20 rounded-3xl mb-4 shadow-lg shadow-indigo-500/5">
           
-          <img src='/favicon.ico' />
+          <img src='/icon-192.png' />
         </div>
 
         <h2 className="text-3xl font-extrabold tracking-tight text-white">
