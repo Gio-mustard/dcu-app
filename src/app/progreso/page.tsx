@@ -63,18 +63,6 @@ export default async function ProgresoPage() {
     )
   })
 
-  // Total minutes focused today
-  const totalMinutesToday = todaySessions.reduce((s, se) => s + se.duration_minutes, 0)
-
-  // Daily goal target: sum of target_time for active goals today
-  const totalDailyTarget = activeGoalsToday.reduce((acc, goal) => acc + (goal.target_time || 0), 0)
-
-  // Focus percentage (capped at 100)
-  const focusPercent = totalDailyTarget > 0
-    ? Math.min(100, Math.round((totalMinutesToday / totalDailyTarget) * 100))
-    : 0
-  const remainingMinutes = Math.max(0, totalDailyTarget - totalMinutesToday)
-
   // Minutes by category today — join session → micro_tarea → objetivo.category
   const categoryMap: Record<string, { done: number; target: number }> = {}
   for (const goal of activeGoalsToday) {
@@ -93,6 +81,25 @@ export default async function ProgresoPage() {
     if (!categoryMap[goal.category]) categoryMap[goal.category] = { done: 0, target: 60 }
     categoryMap[goal.category].done += session.duration_minutes
   }
+
+  // Calculate capped progress across categories today
+  let totalCappedMinutes = 0
+  let totalDailyTarget = 0
+  for (const cat of Object.keys(categoryMap)) {
+    const { done, target } = categoryMap[cat]
+    totalCappedMinutes += Math.min(done, target)
+    totalDailyTarget += target
+  }
+
+  // Focus percentage (capped at 100)
+  const focusPercent = totalDailyTarget > 0
+    ? Math.min(100, Math.round((totalCappedMinutes / totalDailyTarget) * 100))
+    : 0
+  const remainingMinutes = Math.max(0, totalDailyTarget - totalCappedMinutes)
+
+  // Total minutes focused today (actual uncapped duration)
+  const totalMinutesToday = todaySessions.reduce((s, se) => s + se.duration_minutes, 0)
+
   const categoryStats = Object.entries(categoryMap).map(([cat, { done, target }]) => ({
     category: cat,
     doneMin: done,

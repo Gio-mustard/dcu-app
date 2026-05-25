@@ -57,21 +57,6 @@ export default function HomeClient({
   }
 
   // --- STATS AND LOGIC CALCULATIONS ---
-  // 1. Calculate category progress (average of goals in each category)
-  const getCategoryAverage = (catName: string): number => {
-    const catGoals = dbGoals.filter((g) => g.category === catName)
-    if (catGoals.length === 0) return 0
-    const sum = catGoals.reduce((acc, curr) => acc + (curr.progress || 0), 0)
-    return sum / catGoals.length
-  }
-
-  const categoryProgress: GoalCategoryProgress = {
-    academic: getCategoryAverage('Académico'),
-    health: getCategoryAverage('Salud'),
-    mentalHealth: getCategoryAverage('Salud Mental'),
-    personal: getCategoryAverage('Personal'),
-  }
-
   // 2. Active goals today (goals containing current day of the week in rhythm_days)
   const activeGoalsToday = dbGoals.filter((goal) => {
     if (goal.status !== 'en_curso') return false
@@ -86,33 +71,63 @@ export default function HomeClient({
     )
   })
 
-  // 3. Daily Progress based on actual completed sessions
-  const totalTargetMinutesToday = activeGoalsToday.reduce((acc, goal) => acc + (goal.target_time || 0), 0)
-  const completedMinutesToday = dbSessions.reduce((acc, session) => acc + (session.duration_minutes || 0), 0)
+  // 3. Daily Progress based on actual completed sessions (capped by category targets)
+  const homeCategoryMap: Record<string, { done: number; target: number }> = {}
+  for (const goal of activeGoalsToday) {
+    if (!homeCategoryMap[goal.category]) {
+      homeCategoryMap[goal.category] = { done: 0, target: goal.target_time || 60 }
+    } else {
+      homeCategoryMap[goal.category].target += goal.target_time || 60
+    }
+  }
+  for (const session of dbSessions) {
+    if (!session.micro_tarea_id) continue
+    const task = dbTasks.find((t) => t.id === session.micro_tarea_id)
+    if (!task) continue
+    const goal = dbGoals.find((g) => g.id === task.objetivo_id)
+    if (!goal) continue
+    if (!homeCategoryMap[goal.category]) {
+      homeCategoryMap[goal.category] = { done: 0, target: goal.target_time || 60 }
+    }
+    homeCategoryMap[goal.category].done += session.duration_minutes || 0
+  }
+
+  // Sum capped done minutes and target minutes across categories today
+  let totalCappedMinutesToday = 0
+  let totalTargetMinutesToday = 0
+  for (const cat of Object.keys(homeCategoryMap)) {
+    const { done, target } = homeCategoryMap[cat]
+    totalCappedMinutesToday += Math.min(done, target)
+    totalTargetMinutesToday += target
+  }
 
   let dailyProgress = 0
   if (totalTargetMinutesToday > 0) {
-    dailyProgress = (completedMinutesToday / totalTargetMinutesToday) * 100
+    dailyProgress = Math.round((totalCappedMinutesToday / totalTargetMinutesToday) * 100)
     if (dailyProgress > 100) dailyProgress = 100
   }
 
+  const completedMinutesToday = totalCappedMinutesToday
+
   // 4. Remaining time for Academic category today
   const academicGoalsToday = activeGoalsToday.filter((g) => g.category === 'Académico')
-  const targetAcademicMinutes = academicGoalsToday.reduce((acc, g) => acc + (g.target_time || 0), 0)
-  
-  const academicGoalIds = academicGoalsToday.map((g) => g.id)
-  const completedAcademicMinutesToday = dbSessions
-    .filter((session) => {
-      if (session.micro_tarea_id) {
-        const task = dbTasks.find((t) => t.id === session.micro_tarea_id)
-        return task && academicGoalIds.includes(task.objetivo_id)
-      }
-      return false
-    })
-    .reduce((acc, s) => acc + (s.duration_minutes || 0), 0)
+  const academicData = homeCategoryMap['Académico']
+  const remainingAcademicMinutes = academicData
+    ? Math.max(0, academicData.target - academicData.done)
+    : 0
 
-  let remainingAcademicMinutes = targetAcademicMinutes - completedAcademicMinutesToday
-  if (remainingAcademicMinutes < 0) remainingAcademicMinutes = 0
+  const getCategoryDailyPercent = (catName: string): number => {
+    const catData = homeCategoryMap[catName]
+    if (!catData || catData.target === 0) return 0
+    return Math.min(100, Math.round((catData.done / catData.target) * 100))
+  }
+
+  const categoryProgress: GoalCategoryProgress = {
+    academic: getCategoryDailyPercent('Académico'),
+    health: getCategoryDailyPercent('Salud'),
+    mentalHealth: getCategoryDailyPercent('Salud Mental'),
+    personal: getCategoryDailyPercent('Personal'),
+  }
 
   // 5. Dynamic Quick Access list from database items (Objetivos, Micro-tareas, Enfoques)
   const quickAccessItems: QuickAccessItemData[] = []

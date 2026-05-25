@@ -144,7 +144,7 @@ export default function InsigniasClient({
             Colección de {userName}
           </h2>
           <p className="text-[11px] text-slate-400 font-semibold mt-1">
-            Visualiza todas tus insignias de honor y logros que has desbloqueado en tu camino.
+            Visualiza todas tus insignias y logros que has desbloqueado en tu camino.
           </p>
         </div>
 
@@ -154,7 +154,7 @@ export default function InsigniasClient({
             <div className="p-1 bg-yellow-100 text-yellow-700 rounded-lg">
               <Award className="w-4.5 h-4.5" />
             </div>
-            <h3 className="text-base font-black text-indigo-950">Insignias de Honor ({insigniasToShow.length})</h3>
+            <h3 className="text-base font-black text-indigo-950">Insignias ({insigniasToShow.length})</h3>
           </div>
 
           <div className="flex flex-col gap-3">
@@ -176,7 +176,7 @@ export default function InsigniasClient({
 
                   {/* Middle Content */}
                   <div className="relative z-10 flex-1">
-                    <p className="text-[10px] font-bold text-[#5F49E0] uppercase tracking-widest leading-none mb-1.5">INSIGNIA DE HONOR</p>
+                    <p className="text-[10px] font-bold text-[#5F49E0] uppercase tracking-widest leading-none mb-1.5">INSIGNIA</p>
                     <h4 className="text-[17px] font-black text-[#1E0A6C] tracking-tight leading-tight">{insignia.title}</h4>
                     {insignia.description && (
                       <p className="text-[11px] text-[#4d3ca6] font-semibold leading-tight mt-1.5 max-w-[90%]">{insignia.description}</p>

@@ -41,11 +41,10 @@ export default async function HomePage() {
     // 2. Fetch completed focus sessions log for today
     dbSessions = await sessionRepo.getSessionsCompletedToday(user.id)
 
-    // 3. Fetch tasks belonging to goals active today
-    const activeGoalsToday = await goalRepo.getActiveGoalsToday(user.id, dayOfWeekSpanish)
-    const activeGoalIds = activeGoalsToday.map((g) => g.id)
-    if (activeGoalIds.length > 0) {
-      dbTasks = await taskRepo.getMicroTasksByGoalIds(activeGoalIds)
+    // 3. Fetch all tasks for the user's goals (to properly map all session achievements today)
+    const allGoalIds = dbGoals.map((g) => g.id)
+    if (allGoalIds.length > 0) {
+      dbTasks = await taskRepo.getMicroTasksByGoalIds(allGoalIds)
     }
 
     // 4. Fetch free focus templates (enfoques)

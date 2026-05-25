@@ -424,7 +424,7 @@ export default function ProgresoClient({
                     <div className="flex justify-between items-center mb-1.5">
                       <div className="flex items-center gap-2">
                         <span className={`w-6 h-6 rounded-lg flex items-center justify-center text-[10px] ${categoryColorLight[cat.category] || 'bg-indigo-50 text-indigo-700'}`}>
-                          {cat.category === 'Académico' ? '📚' : cat.category === 'Salud' ? '💚' : cat.category === 'Personal' ? '🎯' : '🧠'}
+                          {/* {cat.category === 'Académico' ? '📚' : cat.category === 'Salud' ? '💚' : cat.category === 'Personal' ? '🎯' : '🧠'} */}
                         </span>
                         <span className="text-sm font-bold text-indigo-950">{cat.category}</span>
                       </div>

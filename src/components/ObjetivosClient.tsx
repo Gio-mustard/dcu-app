@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Plus, Sparkles } from 'lucide-react'
+import { Plus, Sparkles, FolderOpen } from 'lucide-react'
 import GoalCardCarousel from './GoalCardCarousel'
 import CategoryFilters from './CategoryFilters'
 import TasksList from './TasksList'
@@ -231,6 +231,17 @@ export default function ObjetivosClient({
           enfoques={filteredEnfoques}
           onStartFocus={handleStartFocus}
         />
+
+        {/* View All Goals Button */}
+        <div className="flex justify-center mt-10 mb-6 px-6">
+          <button
+            onClick={() => router.push('/objetivos/todos')}
+            className="w-full max-w-sm py-4 bg-white text-indigo-950 hover:bg-indigo-50/20 active:scale-[0.98] border border-slate-200 shadow-sm rounded-2xl text-xs font-black tracking-wider uppercase transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <FolderOpen className="w-4 h-4 text-indigo-600" />
+            Ver todos mis objetivos
+          </button>
+        </div>
       </div>
 
       {/* BOTTOM NAV */}
