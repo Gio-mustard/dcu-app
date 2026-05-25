@@ -431,7 +431,7 @@ export default function EnfoqueClient({
               </span>
 
               <div className="flex items-center gap-4 mt-3.5 z-20">
-                <button
+                {/* <button
                   onClick={() => setIsRunning(!isRunning)}
                   className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors cursor-pointer text-white"
                 >
@@ -442,7 +442,7 @@ export default function EnfoqueClient({
                   className="p-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors cursor-pointer text-slate-400 hover:text-white"
                 >
                   <RotateCcw className="w-4 h-4" />
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
