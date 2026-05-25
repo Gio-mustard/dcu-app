@@ -36,3 +36,7 @@ body {
 .animate-fade-in {
   animation: fadeIn 0.35s ease-out both;
 }
+/* esto para evitar el zoom que hace ios cuando haces focus en un input */
+input,textarea{
+  font-size: 17px !important;
+}
