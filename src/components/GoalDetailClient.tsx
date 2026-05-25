@@ -406,30 +406,7 @@ export default function GoalDetailClient({
   return (
     <div className="w-full min-h-screen bg-slate-50/50 pb-28 text-slate-800 relative">
       
-      {/* HEADER SECTION (Avatar, Title, Settings) */}
-      <header className="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-100/80 sticky top-0 z-40">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => router.push('/perfil')}
-            className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 bg-slate-200 shadow-sm flex items-center justify-center font-bold text-indigo-950 text-xs active:scale-95 transition-transform cursor-pointer"
-          >
-            {/* Mock profile photo avatar matching mockup */}
-            <div className="w-full h-full bg-slate-400 flex items-center justify-center text-white text-xs font-black">
-              U
-            </div>
-          </button>
-          <span className="text-[17px] font-black text-indigo-950 tracking-tight">
-            Objetivos
-          </span>
-        </div>
-
-        <button
-          onClick={() => router.push('/')}
-          className="p-1.5 text-indigo-950 hover:bg-slate-50 rounded-xl transition-colors cursor-pointer"
-        >
-          <Settings className="w-5 h-5 text-indigo-950" />
-        </button>
-      </header>
+     
 
       <div className="px-6 pt-6">
         
@@ -491,20 +468,21 @@ export default function GoalDetailClient({
             {renderStackedTitle(goal.title)}
           </h1>
 
-          <div className="inline-block text-[9px] font-bold text-emerald-800 bg-emerald-100/80 px-2.5 py-1 rounded-full uppercase tracking-wider mb-2.5 flex items-center gap-1 w-max">
+          {/* <div className="inline-block text-[9px] font-bold text-emerald-800 bg-emerald-100/80 px-2.5 py-1 rounded-full uppercase tracking-wider mb-2.5 flex items-center gap-1 w-max">
             <Sparkles className="w-3 h-3 text-emerald-600" />
             Descripción automática
           </div>
           
           <p className="text-sm text-slate-500 font-medium leading-relaxed max-w-[95%]">
             {goal.description || 'Cumple tus metas paso a paso.'}
-          </p>
+          </p> */}
         </div>
 
         {/* INSIGNIA COMPONENT */}
+        <h2 className='text-sm text-slate-500 font-medium leading-relaxed max-w-[95%] ml-5'>Al completar tu objetivo obtendras...</h2>
         <div 
           title={goal.insignia_description || ''}
-          className="mb-6 w-full bg-gradient-to-r from-[#E2DCFF] via-[#E4DFFF] to-[#E9E6FF] border border-[#D5C9FF] rounded-[28px] p-5 flex items-center gap-4 relative overflow-hidden shadow-[0_8px_30px_rgba(202,191,255,0.2)] text-left cursor-help group"
+          className="mb-6 w-full bg-gradient-to-r from-[#E2DCFF] via-[#E4DFFF] to-[#E9E6FF] border border-[#D5C9FF] rounded-[28px] p-5 flex items-center gap-4 relative overflow-hidden shadow-[0_8px_30px_rgba(202,191,255,0.45)] text-left cursor-help group"
         >
           {/* Background watermark trophy */}
           <div className="absolute right-[-10px] top-1/2 -translate-y-1/2 pointer-events-none opacity-20 text-[#9E86FF]">
