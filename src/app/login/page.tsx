@@ -50,7 +50,8 @@ export default function LoginPage() {
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center z-10">
         {/* App Logo */}
         <div className="inline-flex items-center justify-center p-3 bg-indigo-500/15 border border-indigo-500/20 rounded-3xl mb-4 shadow-lg shadow-indigo-500/5">
-          <Sparkles className="h-8 w-8 text-emerald-400" />
+          
+          <img src='/favicon.ico' />
         </div>
 
         <h2 className="text-3xl font-extrabold tracking-tight text-white">
